@@ -12,16 +12,16 @@ const GameBoard = (()=> {
   const getBoard = ()=> board;
 
   const holdValue = (row, column, player)=> {
-    const cell = board[row[column]];
-    if(cell.getValue != 0){
+    const cell = (board[row])[column];
+    if(cell.getValue() != 0){
       console.log(`this position is reserved`)
-      return;
+      return 'reserved';
     }
-    cell.setValue = player;
+    cell.setValue(player);
   }
 
   const printBoard = ()=> {
-    const cellValuesBoard = board.map(row => row.map(cell => cell.getValue));
+    const cellValuesBoard = board.map(row => row.map(cell => cell.getValue()));
     console.table(cellValuesBoard);
   }
   return {
@@ -64,12 +64,12 @@ const GameController = (()=> {
 
   const printNewRound = ()=> {
     GameBoard.printBoard();
-    console.log(`${activePlayer}'s new  turn...`);
+    console.log(`${activePlayer.name}'s new  turn...`);
   }
   const playRound = (row, column)=> {
-    GameBoard.holdValue(row, column, activePlayer);
-    printNewRound();
+    if(GameBoard.holdValue(row, column, activePlayer) === 'reserved') return;
     switchPlayers();
+    printNewRound();
   }
   return {
     playRound,
