@@ -40,7 +40,7 @@ body {
   display: grid;
   place-items: center;
   min-height: 100vh;
-  font-size: var(--fs-400);
+  font-size: var(--fs-300);
   font-family: var(--ff-changa);
   line-height: 1.2;
   background-color: var(--clr-primary-dark);
