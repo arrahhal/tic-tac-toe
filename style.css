@@ -19,7 +19,14 @@
   --size-50: 5px;
   --size-100: calc(var(--size-50) * 2);
 }
-
+@media (max-width: 470px) {
+  :root {
+    --fs-300: 1.1rem;
+    --fs-400: 1.6rem;
+    --fs-700: 3.8rem;
+    --fs-900: 5rem;
+  }
+}
 *,
 *::before,
 *::after {
