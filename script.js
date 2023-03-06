@@ -32,12 +32,16 @@ const GameBoard = (() => {
   const getCellValues = () =>
     board.map((row) => row.map((cell) => cell.getValue()));
 
+  const checkCellEmpty = (row, col) => 
+    (board[row][col]).getValue() === 0;
+
   window.addEventListener('DOMContentLoaded', initNewBoard);
 
   return {
     holdValue,
     getCellValues,
     initNewBoard,
+    checkCellEmpty
   };
 })();
 
@@ -63,7 +67,12 @@ const GameController = (() => {
 
   const playRound = (row, column) => {
     if (GameBoard.holdValue(row, column) === 'reserved') return;
-    checkWin();
+    if(checkResult() === 'win'){
+      setWinner();
+    } 
+    else if(checkResult() === 'tie'){
+      setTie();
+    } 
     switchPlayers();
   };
 
@@ -80,20 +89,16 @@ const GameController = (() => {
     initNewGame();
   };
   const initNewGame = () => {
-    activePlayer = players[0];
     winner = '';
     GameBoard.initNewBoard();
     uiController.clearBoard();
   };
-  const checkWin = () => {
+  const checkResult = () => {
     const board = GameBoard.getCellValues();
 
     //check rows for winner
     board.map((row) => {
-      if (row[0] === row[1] && row[0] === row[2] && row[0] !== 0) {
-        setWinner();
-        return;
-      }
+      if (row[0] === row[1] && row[0] === row[2] && row[0] !== 0) return 'win';
     });
 
     // check columns for winner
@@ -102,10 +107,7 @@ const GameController = (() => {
         board[0][col] === board[1][col] &&
         board[0][col] === board[2][col] &&
         board[0][col] !== 0
-      ) {
-        setWinner();
-        return;
-      }
+      ) return 'win';
     }
 
     //checks 3-on-angle
@@ -116,15 +118,13 @@ const GameController = (() => {
       (board[2][0] === board[1][1] &&
         board[2][0] === board[0][2] &&
         board[1][1])
-    ) {
-      setWinner();
-      return;
-    }
+    ) return 'win';
 
     // checks for a tie
+    let tieFlag = true;
     for (let i = 0; i < 3; i++)
-      for (let j = 0; j < 3; j++) if (board[i][j] === 0) return;
-    setTie();
+      for (let j = 0; j < 3; j++) if (board[i][j] !== 0) tieFlag = false;
+    if(tieFlag) return 'tie';
   };
 
   return {
@@ -143,8 +143,10 @@ const uiController = (() => {
   const handleClicks = (e) => {
     const row = e.target.dataset.row;
     const col = e.target.dataset.col;
-    printSign(e.target);
-    GameController.playRound(row, col);
+    if(GameBoard.checkCellEmpty(row,col) === true){
+      printSign(e.target);
+      GameController.playRound(row, col);
+    };
   };
   
   const showResult = (mes) => {

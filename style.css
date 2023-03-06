@@ -131,10 +131,11 @@ body {
   height: 0;
   opacity: 0;
   transition: all ease-in .7s;
-  z-index: 99;
+  z-index: -999;
 }
 
 #result.show-result {
   opacity: 1;
   height: 100%;
+  z-index: 999;
 }
