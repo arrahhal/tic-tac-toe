@@ -1,3 +1,14 @@
+const Cell = () => {
+  let value = 0;
+
+  setValue = (newValue) => (value = newValue);
+  getValue = () => value;
+  return {
+    setValue,
+    getValue,
+  };
+};
+
 const GameBoard = (() => {
   const rows = 3;
   const columns = 3;
@@ -10,43 +21,25 @@ const GameBoard = (() => {
     }
   };
 
-  window.addEventListener('DOMContentLoaded', initNewBoard);
-
-  const getBoard = () => board;
-
-  const holdValue = (row, column, player) => {
+  const holdValue = (row, column) => {
     const cell = board[row][column];
-    if (cell.getValue() != 0) {
-      console.log(`this position is reserved`);
-      return 'reserved';
-    }
-    cell.setValue(player);
+    if (cell.getValue() != 0) return 'reserved';
+
+    const activePlayer = GameController.getActivePlayer();
+    cell.setValue(activePlayer.sign);
   };
 
-  const printBoard = () => {
-    console.table(getCellValues());
-  };
   const getCellValues = () =>
     board.map((row) => row.map((cell) => cell.getValue()));
+
+  window.addEventListener('DOMContentLoaded', initNewBoard);
+
   return {
-    getBoard,
     holdValue,
-    printBoard,
     getCellValues,
     initNewBoard,
   };
 })();
-
-function Cell() {
-  let value = 0;
-
-  setValue = (newValue) => (value = newValue);
-  getValue = () => value;
-  return {
-    setValue,
-    getValue,
-  };
-}
 
 const GameController = (() => {
   const players = [
@@ -69,27 +62,26 @@ const GameController = (() => {
   const getActivePlayer = () => activePlayer;
 
   const playRound = (row, column) => {
-    if (GameBoard.holdValue(row, column, activePlayer.sign) === 'reserved')
-      return;
-    switchPlayers();
+    if (GameBoard.holdValue(row, column) === 'reserved') return;
     checkWin();
+    switchPlayers();
   };
 
   const getResultMes = () =>
     winner === '' ? 'It is a tie! ' : `${winner} is the winner`;
 
-  const setWinner = (player) => {
-    winner = player.name;
-    const mes = getResultMes();
-    uiController.showResult(mes);
+  const setWinner = () => {
+    winner = activePlayer.name;
+    uiController.showResult(getResultMes());
     initNewGame();
   };
-  const logTie = () => {
-    uiController.showResult();
+  const setTie = () => {
+    uiController.showResult(getResultMes());
     initNewGame();
   };
   const initNewGame = () => {
     activePlayer = players[0];
+    winner = '';
     GameBoard.initNewBoard();
     uiController.clearBoard();
   };
@@ -99,7 +91,7 @@ const GameController = (() => {
     //check rows for winner
     board.map((row) => {
       if (row[0] === row[1] && row[0] === row[2] && row[0] !== 0) {
-        setWinner(row[0] === 'X' ? players[0] : players[1]);
+        setWinner();
         return;
       }
     });
@@ -111,8 +103,7 @@ const GameController = (() => {
         board[0][col] === board[2][col] &&
         board[0][col] !== 0
       ) {
-        setWinner(board[0][col] === 'X' ? players[0] : players[1]);
-        GameBoard.initNewBoard();
+        setWinner();
         return;
       }
     }
@@ -126,19 +117,19 @@ const GameController = (() => {
         board[2][0] === board[0][2] &&
         board[1][1])
     ) {
-      setWinner(board[1][1] == 'X' ? players[0] : players[1]);
+      setWinner();
       return;
     }
 
     // checks for a tie
     for (let i = 0; i < 3; i++)
       for (let j = 0; j < 3; j++) if (board[i][j] === 0) return;
-    logTie();
+    setTie();
   };
 
   return {
     playRound,
-    getActivePlayer
+    getActivePlayer,
   };
 })();
 
@@ -149,14 +140,13 @@ const uiController = (() => {
   const xTurn = document.getElementById('x-player');
   const oTurn = document.getElementById('o-player');
 
-  const handleClicks = (e)=> {
+  const handleClicks = (e) => {
     const row = e.target.dataset.row;
     const col = e.target.dataset.col;
     printSign(e.target);
     GameController.playRound(row, col);
-  }
-  board.addEventListener('click', handleClicks);
-
+  };
+  
   const showResult = (mes) => {
     resultPane.classList.add('show-result');
     resultPane.textContent = mes;
@@ -180,16 +170,18 @@ const uiController = (() => {
   };
 
   const clearBoard = () => {
-    boardCells.forEach(cell => {
+    boardCells.forEach((cell) => {
       cell.textContent = '';
       cell.classList.remove('text-o');
       cell.classList.remove('text-x');
-    })
-  }
-
+    });
+  };
+  
+  board.addEventListener('click', handleClicks);
+  
   return {
     showResult,
     switchTurn,
-    clearBoard
+    clearBoard,
   };
 })();
