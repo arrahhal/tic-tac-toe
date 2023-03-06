@@ -18,21 +18,22 @@
       <div class="header">
         <h1 class="title">Tic Tac Toe</h1>
         <p>
-          <span id="x-player" class="player">X</span>
-          <span id="o-player" class="player active">O</span> turn . . .
+          <span id="x-player" class="player active">X</span>
+          <span id="o-player" class="player">O</span> turn . . .
         </p>
       </div>
       <div id="game-board" class="board">
-        <div class="card" data-index="0"></div>
-        <div class="card" data-index="1"></div>
-        <div class="card" data-index="2"></div>
-        <div class="card" data-index="3"></div>
-        <div class="card" data-index="4"></div>
-        <div class="card" data-index="5"></div>
-        <div class="card" data-index="6"></div>
-        <div class="card" data-index="7"></div>
-        <div class="card" data-index="8"></div>
+        <div class="cell" data-row="0" data-col="0"></div>
+        <div class="cell" data-row="0" data-col="1"></div>
+        <div class="cell" data-row="0" data-col="2"></div>
+        <div class="cell" data-row="1" data-col="0"></div>
+        <div class="cell" data-row="1" data-col="1"></div>
+        <div class="cell" data-row="1" data-col="2"></div>
+        <div class="cell" data-row="2" data-col="0"></div>
+        <div class="cell" data-row="2" data-col="1"></div>
+        <div class="cell" data-row="2" data-col="2"></div>
       </div>
-    <div id="result" class="result"></div>
+    </div>
+    <div id="result" class="result display-none"></div>
   </body>
 </html>
