@@ -23,8 +23,6 @@ const GameBoard = (() => {
 
   const holdValue = (row, column) => {
     const cell = board[row][column];
-    if (cell.getValue() != 0) return 'reserved';
-
     const activePlayer = GameController.getActivePlayer();
     cell.setValue(activePlayer.sign);
   };
@@ -32,16 +30,12 @@ const GameBoard = (() => {
   const getCellValues = () =>
     board.map((row) => row.map((cell) => cell.getValue()));
 
-  const checkCellEmpty = (row, col) => 
-    (board[row][col]).getValue() === 0;
-
   window.addEventListener('DOMContentLoaded', initNewBoard);
 
   return {
     holdValue,
     getCellValues,
     initNewBoard,
-    checkCellEmpty
   };
 })();
 
@@ -66,7 +60,7 @@ const GameController = (() => {
   const getActivePlayer = () => activePlayer;
 
   const playRound = (row, column) => {
-    if (GameBoard.holdValue(row, column) === 'reserved') return;
+    GameBoard.holdValue(row, column);
     if(checkResult() === 'win'){
       setWinner();
     } 
@@ -141,9 +135,9 @@ const uiController = (() => {
   const oTurn = document.getElementById('o-player');
 
   const handleClicks = (e) => {
-    const row = e.target.dataset.row;
-    const col = e.target.dataset.col;
-    if(GameBoard.checkCellEmpty(row,col) === true){
+    if(checkEmpty(e.target)){
+      const col = e.target.dataset.col;
+      const row = e.target.dataset.row;
       printSign(e.target);
       GameController.playRound(row, col);
     };
@@ -178,6 +172,8 @@ const uiController = (() => {
       cell.classList.remove('text-x');
     });
   };
+
+  const checkEmpty = (cell)=> cell.textContent === '';
   
   board.addEventListener('click', handleClicks);
   
