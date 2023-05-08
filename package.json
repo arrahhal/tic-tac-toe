@@ -1,0 +1,9 @@
+{
+  "name": "tic-tac-toe",
+  "version": "1.0.0",
+  "description": "This is the 'dev' (development) branch. here I tries to add new feature, fix bugs, optimize code and make it more user friendly. check the [main branch](https://github.com/rahhaly/tic-tac-toe) if you want to try the game.",
+  "main": "main.js",
+  "scripts": {},
+  "author": "",
+  "license": "ISC"
+}
