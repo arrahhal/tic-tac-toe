@@ -9,25 +9,27 @@
       href="https://fonts.googleapis.com/css2?family=Changa:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles/style.css" />
-    <script src="./script.js" defer></script>
     <title>Tic Tac Toe</title>
   </head>
   <body>
     <main class="main">
-      <div id="start-page" class="start-page">
+      <div id="start-page" class="start-page" style="display: none">
         <div class="container">
           <h1 class="start-page__title">Tic Tac Toe</h1>
           <p class="start-page__subtitle">Play:</p>
           <div class="start-page__mode-btns">
             <button class="btn">
               vs Player
-              <img class="btn__prefix-img" src="./assets/play.svg" alt="play" />
+              <img
+                class="btn__prefix-img"
+                src="./src/assets/play.svg"
+                alt="play icon"
+              />
             </button>
           </div>
         </div>
       </div>
-      <div class="game-page" style="display: none">
+      <div class="game-page">
         <div class="container">
           <div class="header">
             <h1 class="title">Tic Tac Toe</h1>
@@ -61,5 +63,6 @@
         >
       </p>
     </footer>
+    <script type="module" src="/src/js/main.js"></script>
   </body>
 </html>

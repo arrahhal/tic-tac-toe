@@ -1,3 +1,5 @@
+import { uiController } from './dom';
+
 const Cell = () => {
   let cellValue = 0;
 
@@ -120,7 +122,7 @@ const checkResult = () => {
   if (tieFlag) return 'tie';
 };
 
-export default gameController = {
+export const GameController = {
   playRound,
   getCurrentPlayer,
 };

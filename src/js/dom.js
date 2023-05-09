@@ -1,3 +1,5 @@
+import { GameController } from './game';
+
 const board = document.getElementById('game-board');
 const cellElements = document.querySelectorAll('.cell');
 const resultPane = document.getElementById('result');
@@ -36,8 +38,11 @@ const clearBoard = () => {
 
 const checkEmpty = (cell) => cell.textContent === '';
 
-export default uiController = {
+export const uiController = {
   displayResultMessage,
   switchTurn,
   clearBoard,
+  updateCurrentPlayerUI,
+  checkEmpty,
+  board,
 };
