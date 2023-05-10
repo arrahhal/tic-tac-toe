@@ -1,4 +1,4 @@
-import { uiController } from './dom';
+import { Dom } from './dom';
 
 const Cell = () => {
   let cellValue = 0;
@@ -25,7 +25,7 @@ const GameBoard = (() => {
 
   const holdValue = (row, column) => {
     const cell = cells[row][column];
-    const currentPlayer = GameController.getCurrentPlayer();
+    const currentPlayer = Game.getCurrentPlayer();
     cell.setCellValue(currentPlayer.sign);
   };
 
@@ -57,7 +57,7 @@ let currentPlayer = players[0];
 
 const switchCurrentPlayers = () => {
   currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
-  uiController.switchTurn();
+  Dom.switchTurn();
 };
 const getCurrentPlayer = () => currentPlayer;
 
@@ -76,17 +76,17 @@ const getResultMessage = () =>
 
 const setWinner = () => {
   winner = currentPlayer.name;
-  uiController.displayResultMessage(getResultMessage());
+  Dom.displayResultMessage(getResultMessage());
   initializeNewGame();
 };
 const setTie = () => {
-  uiController.displayResultMessage(getResultMessage());
+  Dom.displayResultMessage(getResultMessage());
   initializeNewGame();
 };
 const initializeNewGame = () => {
   winner = '';
   GameBoard.initializeNewBoard();
-  uiController.clearBoard();
+  Dom.clearBoard();
 };
 const checkResult = () => {
   const cells = GameBoard.getCellValues();
@@ -122,7 +122,7 @@ const checkResult = () => {
   if (tieFlag) return 'tie';
 };
 
-export const GameController = {
+export const Game = {
   playRound,
   getCurrentPlayer,
 };

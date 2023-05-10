@@ -168,6 +168,10 @@ body {
   align-items: center;
   z-index: 1;
 }
+.start-page.is-hidden,
+.game-page.is-hidden {
+  display: none;
+}
 .game-page {
   height: 100%;
   display: flex;
@@ -197,6 +201,7 @@ body {
   border-radius: var(--round-400);
   background: var(--clr-neutral-900);
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 .btn:hover {

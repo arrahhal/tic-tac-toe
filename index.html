@@ -13,13 +13,21 @@
   </head>
   <body>
     <main class="main">
-      <div id="start-page" class="start-page" style="display: none">
+      <div id="start-page" class="start-page">
         <div class="container">
           <h1 class="start-page__title">Tic Tac Toe</h1>
           <p class="start-page__subtitle">Play:</p>
           <div class="start-page__mode-btns">
-            <button class="btn">
+            <button id="start-page__vsplayer-btn" class="btn">
               vs Player
+              <img
+                class="btn__prefix-img"
+                src="./src/assets/play.svg"
+                alt="play icon"
+              />
+            </button>
+            <button id="start-page__vsai-btn" class="btn">
+              vs AI
               <img
                 class="btn__prefix-img"
                 src="./src/assets/play.svg"
@@ -29,7 +37,7 @@
           </div>
         </div>
       </div>
-      <div class="game-page">
+      <div id="game-page" class="game-page is-hidden">
         <div class="container">
           <div class="header">
             <h1 class="title">Tic Tac Toe</h1>
