@@ -1,5 +1,3 @@
-import { Game } from './game';
-
 const selectors = {
   vsPlayerBtn: document.getElementById('start-page__vsplayer-btn'),
   board: document.getElementById('game-board'),
@@ -11,49 +9,40 @@ const selectors = {
   gamePage: document.getElementById('game-page'),
 };
 
-const displayResultMessage = (mes) => {
+function displayResultMessage(message) {
   selectors.resultPane.classList.add('show-result');
-  selectors.resultPane.textContent = mes;
+  selectors.resultPane.textContent = message;
   setTimeout(() => {
     selectors.resultPane.classList.remove('show-result');
   }, 2000);
-};
+}
 
-const updateCurrentPlayerUI = (cell) => {
-  const sign = Game.getCurrentPlayer().sign;
-  cell.textContent = sign;
-  cell.classList.add(`text-${sign.toLowerCase()}`);
-};
+function setCellValue(cellIndex, value) {
+  const cell = document.querySelector(`.cell[data-index="${cellIndex}"]`);
+  cell.textContent = value;
+  cell.classList.add(`text-${value.toLowerCase()}`);
+}
 
-const switchTurn = () => {
-  const sign = Game.getCurrentPlayer().sign;
-  const active = document.getElementById(`${sign.toLowerCase()}-player`);
-  selectors.xTurnElement.classList.remove('active');
-  selectors.oTurnElement.classList.remove('active');
-  active.classList.add('active');
-};
-
-const clearBoard = () => {
+function clearBoard() {
   selectors.cellElements.forEach((cell) => {
     cell.textContent = '';
-    cell.classList.remove('text-o');
-    cell.classList.remove('text-x');
+    cell.classList.remove('text-o', 'text-x');
   });
-};
+}
 
-const checkEmpty = (cell) => cell.textContent === '';
-
-const toggleGamePage = () => {
+function checkEmpty(cell) {
+  return cell.textContent === '';
+}
+function toggleGamePage() {
   selectors.startPage.classList.toggle('is-hidden');
   selectors.gamePage.classList.toggle('is-hidden');
-};
+}
 
 export const Dom = {
   selectors,
   displayResultMessage,
-  switchTurn,
   clearBoard,
-  updateCurrentPlayerUI,
   checkEmpty,
   toggleGamePage,
+  setCellValue,
 };

@@ -1,128 +1,113 @@
-import { Dom } from './dom';
+class Cell {
+  constructor(value = '') {
+    this.value = value;
+  }
 
-const Cell = () => {
-  let cellValue = 0;
+  setValue(value) {
+    this.value = value;
+  }
 
-  const setCellValue = (newCellValue) => (cellValue = newCellValue);
-  const getCellValue = () => cellValue;
-  return {
-    setCellValue,
-    getCellValue,
-  };
-};
+  getValue() {
+    return this.value;
+  }
+}
 
-const GameBoard = (() => {
-  const rows = 3;
-  const columns = 3;
-  const cells = [];
+class GameBoard {
+  constructor() {
+    this.cells = [];
+    this.winner = null;
+    this.players = [
+      {
+        name: 'Player X',
+        sign: 'X',
+      },
+      {
+        name: 'Player O',
+        sign: 'O',
+      },
+    ];
+    this.currentPlayerIndex = 0;
 
-  const initializeNewBoard = () => {
-    for (let i = 0; i < rows; i++) {
-      cells[i] = [];
-      for (let j = 0; j < columns; j++) cells[i].push(Cell());
+    this.initialize();
+  }
+
+  initialize() {
+    this.cells = Array.from({ length: 9 }, () => new Cell());
+    this.winner = null;
+    this.currentPlayerIndex = 0;
+  }
+
+  getCellValues() {
+    return this.cells.map((cell) => cell.getValue());
+  }
+
+  playRound(index) {
+    const player = this.getCurrentPlayer();
+    const cell = this.cells[index];
+
+    if (cell.getValue() !== '') {
+      return null;
     }
-  };
 
-  const holdValue = (row, column) => {
-    const cell = cells[row][column];
-    const currentPlayer = Game.getCurrentPlayer();
-    cell.setCellValue(currentPlayer.sign);
-  };
+    cell.setValue(player.sign);
 
-  const getCellValues = () =>
-    cells.map((row) => row.map((cell) => cell.getCellValue()));
-
-  window.addEventListener('DOMContentLoaded', initializeNewBoard);
-
-  return {
-    holdValue,
-    getCellValues,
-    initializeNewBoard,
-  };
-})();
-
-const players = [
-  {
-    name: 'Player X',
-    sign: 'X',
-  },
-  {
-    name: 'Player O',
-    sign: 'O',
-  },
-];
-
-let winner = '';
-let currentPlayer = players[0];
-
-const switchCurrentPlayers = () => {
-  currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
-  Dom.switchTurn();
-};
-const getCurrentPlayer = () => currentPlayer;
-
-const playRound = (row, column) => {
-  GameBoard.holdValue(row, column);
-  if (checkResult() === 'win') {
-    setWinner();
-  } else if (checkResult() === 'tie') {
-    setTie();
-  }
-  switchCurrentPlayers();
-};
-
-const getResultMessage = () =>
-  winner === '' ? 'It is a tie! ' : `${winner} is the winner`;
-
-const setWinner = () => {
-  winner = currentPlayer.name;
-  Dom.displayResultMessage(getResultMessage());
-  initializeNewGame();
-};
-const setTie = () => {
-  Dom.displayResultMessage(getResultMessage());
-  initializeNewGame();
-};
-const initializeNewGame = () => {
-  winner = '';
-  GameBoard.initializeNewBoard();
-  Dom.clearBoard();
-};
-const checkResult = () => {
-  const cells = GameBoard.getCellValues();
-
-  //check rows for winner
-  cells.map((row) => {
-    if (row[0] === row[1] && row[0] === row[2] && row[0] !== 0) return 'win';
-  });
-
-  // check columns for winner
-  for (let col = 0; col < 3; col++) {
-    if (
-      cells[0][col] === cells[1][col] &&
-      cells[0][col] === cells[2][col] &&
-      cells[0][col] !== 0
-    )
-      return 'win';
+    if (this.checkWin()) {
+      this.setWinner(player);
+      return player;
+    } else if (this.checkTie()) {
+      this.setWinner(null);
+      return 'tie';
+    } else {
+      this.switchCurrentPlayer();
+      return null;
+    }
   }
 
-  //checks 3-on-angle
-  if (
-    (cells[0][0] === cells[1][1] &&
-      cells[0][0] === cells[2][2] &&
-      cells[1][1] !== 0) ||
-    (cells[2][0] === cells[1][1] && cells[2][0] === cells[0][2] && cells[1][1])
-  )
-    return 'win';
+  getCurrentPlayer() {
+    return this.players[this.currentPlayerIndex];
+  }
 
-  // checks for a tie
-  let tieFlag = true;
-  for (let i = 0; i < 3; i++)
-    for (let j = 0; j < 3; j++) if (cells[i][j] === 0) tieFlag = false;
-  if (tieFlag) return 'tie';
-};
+  switchCurrentPlayer() {
+    this.currentPlayerIndex =
+      (this.currentPlayerIndex + 1) % this.players.length;
+  }
+
+  setWinner(player) {
+    this.winner = player;
+  }
+
+  getWinner() {
+    return this.winner;
+  }
+
+  checkWin() {
+    const cells = this.getCellValues();
+    const winningCases = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+
+    return winningCases.some((subArr) =>
+      subArr.every((index) => cells[index] === this.getCurrentPlayer().sign)
+    );
+  }
+
+  checkTie() {
+    const cellsValues = this.getCellValues();
+    return cellsValues.every((cell) => cell !== '');
+  }
+}
 
 export const Game = {
-  playRound,
-  getCurrentPlayer,
+  playRound: (index) => gameBoard.playRound(index),
+  getCurrentPlayer: () => gameBoard.getCurrentPlayer(),
+  initializeNewGame: () => gameBoard.initialize(),
 };
+
+const gameBoard = new GameBoard();
