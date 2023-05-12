@@ -20,8 +20,15 @@ function initializeListeners() {
     }
   };
   function handleVsPlayerBtnClick() {
+    Game.initializeNewGame();
+    Dom.clearBoard();
     Dom.toggleGamePage();
   }
+  function handleReturnBtnClick() {
+    Dom.toggleGamePage();
+  }
+
+  Dom.selectors.returnBtn.addEventListener('click', handleReturnBtnClick);
   Dom.selectors.board.addEventListener('click', handleCellClick);
   Dom.selectors.vsPlayerBtn.addEventListener('click', handleVsPlayerBtnClick);
 }

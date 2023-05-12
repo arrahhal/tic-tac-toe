@@ -1,5 +1,6 @@
 const selectors = {
   vsPlayerBtn: document.getElementById('start-page__vsplayer-btn'),
+  returnBtn: document.getElementById('game-page__return-btn'),
   board: document.getElementById('game-board'),
   cellElements: document.querySelectorAll('.cell'),
   resultPane: document.getElementById('result'),
