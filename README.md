@@ -4,7 +4,7 @@ This is the 'dev' (development) branch. here I tries to add new feature, fix bug
 
 ## TODO
 
-- [ ] separate javascript to modules (use MVC mythology & Vite to bundle theme).
-- [ ] Intro page to choose play option.
-- [ ] Add replay button (don't start round immediately).
+- [x] separate javascript to modules (use MVC mythology & Vite to bundle theme).
+- [x] Intro page to choose play option.
+- [x] Add return button (don't start round immediately).
 - [ ] Add vs AI option alongside vs player option.
