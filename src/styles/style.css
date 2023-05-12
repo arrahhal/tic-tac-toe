@@ -33,9 +33,9 @@
 }
 @media (max-width: 470px) {
   :root {
-    --fs-300: 1.1rem;
-    --fs-400: 1.5rem;
-    --fs-700: 3.5rem;
+    --fs-300: 1rem;
+    --fs-400: 1.4rem;
+    --fs-700: 3.4rem;
     --fs-900: 4rem;
   }
 }
@@ -50,10 +50,8 @@
 }
 
 body {
-  position: relative;
   display: grid;
-  grid-template-rows: 1fr min-content;
-  grid-template-areas: main footer;
+  grid-template-rows: 1fr;
   min-height: 100vh;
   font-size: var(--fs-400);
   font-family: var(--ff-changa);
@@ -62,7 +60,10 @@ body {
   color: var(--clr-neutral-900);
   user-select: none;
 }
-
+.main {
+  display: grid;
+  grid-template-columns: 1fr;
+}
 .board {
   --bd-grid: 3px solid var(--clr-neutral-900);
   display: grid;
@@ -79,46 +80,13 @@ body {
   font-weight: var(--fw-700);
 }
 
+/*  middle column  */
 .board > .cell:nth-of-type(3n + 2) {
   border-inline: var(--bd-grid);
 }
-
-.board > :not(:nth-child(-n + 3)):not(:nth-child(n + 7)) {
+/*  middle row */
+.board > :nth-child(-n + 6):not(:nth-child(-n + 3)) {
   border-block: var(--bd-grid);
-}
-
-.header {
-  text-align: center;
-  margin-bottom: var(--size-100);
-  color: var(--clr-primary-dark);
-}
-
-.title {
-  background-color: var(--clr-secondary);
-  font-size: var(--fs-700);
-  font-weight: var(--fw-700);
-}
-
-.header p {
-  height: var(--size-300);
-}
-
-.player {
-  font-size: var(--fs-300);
-  transition: 0.5s ease-out;
-  opacity: 0.7;
-}
-
-.player.active {
-  font-size: var(--fs-400);
-  opacity: 1;
-}
-
-#x-player.active {
-  color: var(--clr-x);
-}
-#o-player.active {
-  color: var(--clr-o);
 }
 
 .text-x {
@@ -143,47 +111,36 @@ body {
   z-index: -999;
 }
 
-#result.show-result {
+.result.show-result {
   opacity: 1;
   height: 100%;
   z-index: 999;
 }
 
-.footer {
-  grid-area: 'footer';
-  display: flex;
-  justify-content: center;
+.start-page__footer {
   padding-block: 1rem;
 }
-.main {
-  position: relative;
-  grid-area: 'main';
-  display: grid;
-}
 .start-page {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  z-index: 1;
+  display: grid;
+  grid-template-rows: 1fr min-content;
+  place-items: center;
 }
+
 .start-page.is-hidden,
 .game-page.is-hidden {
   display: none;
 }
 .game-page {
-  height: 100%;
-  display: flex;
-  align-items: center;
+  display: grid;
+  place-items: center;
 }
 .container {
   width: min(30rem, 100% - 2rem);
-  margin-inline: auto;
   text-align: center;
 }
 .start-page__title {
   font-size: var(--fs-900);
+  font-weight: var(--fw-700);
   margin-bottom: var(--size-100);
 }
 .start-page__subtitle {
