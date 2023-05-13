@@ -12,21 +12,39 @@ class Cell {
   }
 }
 
+class Player {
+  constructor(name = '', sign = '', isHisTurn = false) {
+    this.name = name;
+    this.sign = sign;
+    this.isHisTurn = isHisTurn;
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  getSign() {
+    return this.sign;
+  }
+
+  getHisTurn() {
+    return this.isHisTurn;
+  }
+
+  toggleHisTurn() {
+    this.isHisTurn = !this.isHisTurn;
+  }
+}
+
 class GameBoard {
   constructor() {
     this.cells = [];
     this.winner = null;
     this.players = [
-      {
-        name: 'Player X',
-        sign: 'X',
-      },
-      {
-        name: 'Player O',
-        sign: 'O',
-      },
+      new Player('Player x', 'X', true),
+      new Player('Player o', 'O', false),
     ];
-    this.currentPlayerIndex = 0;
+    this.isAiModeActive = false;
 
     this.initialize();
   }
@@ -34,42 +52,55 @@ class GameBoard {
   initialize() {
     this.cells = Array.from({ length: 9 }, () => new Cell());
     this.winner = null;
-    this.currentPlayerIndex = 0;
   }
 
-  getCellValues() {
+  getCellsValues() {
     return this.cells.map((cell) => cell.getValue());
+  }
+
+  activateAiMode() {
+    this.isAiModeActive = true;
+  }
+
+  deActivateAiMode() {
+    this.isAiModeActive = false;
+  }
+
+  getRandomIndex() {
+    return Math.floor(Math.random() * 9);
+  }
+
+  getAiChoice() {
+    let randomIndex = this.getRandomIndex();
+    while (this.cells[randomIndex].getValue() !== '') {
+      randomIndex = this.getRandomIndex();
+    }
+    return randomIndex;
   }
 
   playRound(index) {
     const player = this.getCurrentPlayer();
     const cell = this.cells[index];
 
-    if (cell.getValue() !== '') {
-      return null;
-    }
+    if (cell.getValue() !== '') return;
 
-    cell.setValue(player.sign);
+    cell.setValue(player.getSign());
 
     if (this.checkWin()) {
       this.setWinner(player);
-      return player;
     } else if (this.checkTie()) {
       this.setWinner(null);
-      return 'tie';
     } else {
-      this.switchCurrentPlayer();
-      return null;
+      this.switchPlayersTurns();
     }
   }
 
   getCurrentPlayer() {
-    return this.players[this.currentPlayerIndex];
+    return this.players.find((player) => player.getHisTurn() === true);
   }
 
-  switchCurrentPlayer() {
-    this.currentPlayerIndex =
-      (this.currentPlayerIndex + 1) % this.players.length;
+  switchPlayersTurns() {
+    this.players.forEach((player) => player.toggleHisTurn());
   }
 
   setWinner(player) {
@@ -81,7 +112,7 @@ class GameBoard {
   }
 
   checkWin() {
-    const cells = this.getCellValues();
+    const cells = this.getCellsValues();
     const winningCases = [
       [0, 1, 2],
       [3, 4, 5],
@@ -94,20 +125,33 @@ class GameBoard {
     ];
 
     return winningCases.some((subArr) =>
-      subArr.every((index) => cells[index] === this.getCurrentPlayer().sign)
+      subArr.every(
+        (index) => cells[index] === this.getCurrentPlayer().getSign()
+      )
     );
   }
 
   checkTie() {
-    const cellsValues = this.getCellValues();
+    const cellsValues = this.getCellsValues();
     return cellsValues.every((cell) => cell !== '');
+  }
+  isGameOver() {
+    return this.checkTie() || this.checkWin() ? true : false;
   }
 }
 
 export const Game = {
   playRound: (index) => gameBoard.playRound(index),
-  getCurrentPlayer: () => gameBoard.getCurrentPlayer(),
+  getWinner: () => gameBoard.getWinner(),
   initializeNewGame: () => gameBoard.initialize(),
+  getCellsValues: () => gameBoard.getCellsValues(),
+  activateAiMode: () => gameBoard.activateAiMode(),
+  deActivateAiMode: () => gameBoard.deActivateAiMode(),
+  getAiChoice: () => gameBoard.getAiChoice(),
+  isAiModeActive: () => gameBoard.isAiModeActive,
+  checkWin: () => gameBoard.checkWin(),
+  checkTie: () => gameBoard.checkTie(),
+  isGameOver: () => gameBoard.isGameOver(),
 };
 
 const gameBoard = new GameBoard();

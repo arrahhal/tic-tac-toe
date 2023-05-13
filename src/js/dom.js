@@ -1,5 +1,6 @@
 const selectors = {
   vsPlayerBtn: document.getElementById('start-page__vsplayer-btn'),
+  vsAiBtn: document.getElementById('start-page__vsai-btn'),
   returnBtn: document.getElementById('game-page__return-btn'),
   board: document.getElementById('game-board'),
   cellElements: document.querySelectorAll('.cell'),
@@ -18,10 +19,14 @@ function displayResultMessage(message) {
   }, 2000);
 }
 
-function setCellValue(cellIndex, value) {
-  const cell = document.querySelector(`.cell[data-index="${cellIndex}"]`);
-  cell.textContent = value;
-  cell.classList.add(`text-${value.toLowerCase()}`);
+function setBoard(cells) {
+  let index = 0;
+  cells.forEach((cellValue) => {
+    const cell = document.querySelector(`[data-index="${index}"]`);
+    cell.textContent = cellValue;
+    cell.className = `cell text-${cellValue.toLowerCase()}`;
+    index++;
+  });
 }
 
 function clearBoard() {
@@ -34,6 +39,7 @@ function clearBoard() {
 function checkEmpty(cell) {
   return cell.textContent === '';
 }
+
 function toggleGamePage() {
   selectors.startPage.classList.toggle('is-hidden');
   selectors.gamePage.classList.toggle('is-hidden');
@@ -45,5 +51,5 @@ export const Dom = {
   clearBoard,
   checkEmpty,
   toggleGamePage,
-  setCellValue,
+  setBoard,
 };
