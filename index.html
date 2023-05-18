@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Changa:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Tic Tac Toe</title>
+    <script type="module" crossorigin src="./assets/index-57a782c6.js"></script>
+    <link rel="stylesheet" href="./assets/index-71d25f42.css" />
+  </head>
+  <body>
+    <main class="main">
+      <div id="start-page" class="start-page">
+        <div class="container">
+          <h1 class="start-page__title">Tic Tac Toe</h1>
+          <p class="start-page__subtitle">Play:</p>
+          <div class="start-page__mode-btns">
+            <button id="start-page__vsplayer-btn" class="btn">
+              vs Player
+              <img
+                class="btn__prefix-img"
+                src="./assets/play-f310ecd9.svg"
+                alt="play icon"
+              />
+            </button>
+            <button id="start-page__vsai-btn" class="btn">
+              vs AI
+              <img
+                class="btn__prefix-img"
+                src="./assets/play-f310ecd9.svg"
+                alt="play icon"
+              />
+            </button>
+          </div>
+        </div>
+        <div class="start-page__footer">
+          <p>
+            Created by
+            <a href="https://www.github.com/rahhaly" target="_blank"
+              >Abdulrahman</a
+            >. See
+            <a href="https://www.github.com/rahhaly/tic-tac-toe" target="_blank"
+              >Source Code</a
+            >
+          </p>
+        </div>
+      </div>
+      <div id="game-page" class="game-page is-hidden">
+        <div class="container">
+          <div id="game-board" class="board">
+            <div class="cell" data-index="0"></div>
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+            <div class="cell" data-index="7"></div>
+            <div class="cell" data-index="8"></div>
+          </div>
+        </div>
+        <button id="game-page__return-btn" class="btn">
+          Return
+          <img
+            class="btn__prefix-img"
+            src="./assets/arrow-left-69ed4fa0.svg"
+            alt="arrow left"
+          />
+        </button>
+        <div id="result" class="result display-none"></div>
+      </div>
+    </main>
+  </body>
+</html>
