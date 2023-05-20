@@ -1,17 +1,3 @@
-class Cell {
-  constructor(value = '') {
-    this.value = value;
-  }
-
-  setValue(value) {
-    this.value = value;
-  }
-
-  getValue() {
-    return this.value;
-  }
-}
-
 class Player {
   constructor(name = '', sign = '', isHisTurn = false) {
     this.name = name;
@@ -50,12 +36,12 @@ class GameBoard {
   }
 
   initialize() {
-    this.cells = Array.from({ length: 9 }, () => new Cell());
+    this.cells = Array.from({ length: 9 }, () => '');
     this.winner = null;
   }
 
-  getCellsValues() {
-    return this.cells.map((cell) => cell.getValue());
+  getCellsValues(cells = this.cells) {
+    return cells;
   }
 
   activateAiMode() {
@@ -66,25 +52,65 @@ class GameBoard {
     this.isAiModeActive = false;
   }
 
-  getRandomIndex() {
-    return Math.floor(Math.random() * 9);
+  evaluateScore(board) {
+    if (this.checkWin(board, this.players[0])) return -1;
+    if (this.checkWin(board, this.players[1])) return +1;
+    if (this.checkTie(board)) return 0;
+  }
+
+  minimax(board, depth, isMaximizing) {
+    if (this.isGameOver(board)) {
+      return this.evaluateScore(board);
+    }
+
+    if (isMaximizing) {
+      let bestScore = -9999;
+      for (let i = 0; i < board.length; i++) {
+        if (board[i] === '') {
+          board[i] = this.players[1].sign;
+          let score = this.minimax(board, depth + 1, false);
+          board[i] = '';
+          bestScore = Math.max(score, bestScore);
+        }
+      }
+      return bestScore;
+    } else {
+      let bestScore = +9999;
+      for (let i = 0; i < board.length; i++) {
+        if (board[i] === '') {
+          board[i] = this.players[0].sign;
+          let score = this.minimax(board, depth + 1, true);
+          board[i] = '';
+          bestScore = Math.min(score, bestScore);
+        }
+      }
+      return bestScore;
+    }
   }
 
   getAiChoice() {
-    let randomIndex = this.getRandomIndex();
-    while (this.cells[randomIndex].getValue() !== '') {
-      randomIndex = this.getRandomIndex();
+    let bestScore = -Infinity;
+    let bestMove;
+    for (let i = 0; i < this.cells.length; i++) {
+      if (this.cells[i] === '') {
+        this.cells[i] = this.players[1].sign;
+        let score = this.minimax(this.cells, 0, false);
+        this.cells[i] = '';
+        if (score > bestScore) {
+          bestScore = score;
+          bestMove = i;
+        }
+      }
     }
-    return randomIndex;
+    return bestMove;
   }
 
   playRound(index) {
     const player = this.getCurrentPlayer();
-    const cell = this.cells[index];
 
-    if (cell.getValue() !== '') return;
+    if (this.cells[index] !== '') return;
 
-    cell.setValue(player.getSign());
+    this.cells[index] = player.getSign();
 
     if (this.checkWin()) {
       this.setWinner(player);
@@ -111,8 +137,7 @@ class GameBoard {
     return this.winner;
   }
 
-  checkWin() {
-    const cells = this.getCellsValues();
+  checkWin(cells = this.cells, player = this.getCurrentPlayer()) {
     const winningCases = [
       [0, 1, 2],
       [3, 4, 5],
@@ -125,18 +150,20 @@ class GameBoard {
     ];
 
     return winningCases.some((subArr) =>
-      subArr.every(
-        (index) => cells[index] === this.getCurrentPlayer().getSign()
-      )
+      subArr.every((index) => cells[index] === player.sign)
     );
   }
 
-  checkTie() {
-    const cellsValues = this.getCellsValues();
-    return cellsValues.every((cell) => cell !== '');
+  checkTie(cells = this.cells) {
+    return cells.every((cell) => cell !== '');
   }
-  isGameOver() {
-    return this.checkTie() || this.checkWin() ? true : false;
+
+  isGameOver(cells = this.cells) {
+    return (
+      this.checkTie(cells) ||
+      this.checkWin(cells, this.players[0]) ||
+      this.checkWin(cells, this.players[1])
+    );
   }
 }
 
